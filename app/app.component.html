@@ -1,14 +1,14 @@
 <div class="timer">
-	<h1>{{statusLabel}}</h1>
+	<h1>{{pomodoro.statusLabel}}</h1>
 	<div class="counter">
-		<span>{{leftDecoration}}</span>
-		<span>{{countdown | minutes}}</span>
+		<span>{{pomodoro.leftDecoration}}</span>
+		<span>{{pomodoro.countdown | minutes}}</span>
 		:
-		<span>{{countdown | seconds}}</span>
-		<span>{{rightDecoration}}</span>
+		<span>{{pomodoro.countdown | seconds}}</span>
+		<span>{{pomodoro.rightDecoration}}</span>
 	</div>
 	<div class="timer-buttons">
-		<button (click)="toggleState()">[{{stateLabel}}]</button>
-		<button (click)="edit()">[{{editLabel}}]</button>
+		<button (click)="toggleState()">[{{pomodoro.stateLabel}}]</button>
+		<button (click)="edit()">[{{pomodoro.editLabel}}]</button>
 	</div>
 </div>

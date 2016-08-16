@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Pomodoro } from './pomodoro';
 
 @Component({
     selector: 'my-app',
@@ -7,19 +8,9 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent {
-	statusLabel: string;
-	countdown: number;
-	leftDecoration: string;
-	rightDecoration: string;
-	stateLabel: string;
-	editLabel: string;
+	pomodoro: Pomodoro;
 
 	constructor() {
-		this.statusLabel="go work";
-		this.countdown= 1000;
-		this.leftDecoration= "<";
-		this.rightDecoration= ">";
-		this.stateLabel= "state";
-		this.editLabel= "edit";
+		this.pomodoro = new Pomodoro();
 	}
 }
