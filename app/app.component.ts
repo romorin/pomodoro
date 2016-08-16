@@ -13,4 +13,12 @@ export class AppComponent {
 	constructor() {
 		this.pomodoro = new Pomodoro();
 	}
+
+	public onEdit(){
+		this.pomodoro.onEdit();
+	}
+
+	public onToggle() {
+		this.pomodoro.onToggle();
+	}
 }

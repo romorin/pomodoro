@@ -16,24 +16,39 @@ export class Pomodoro implements Timer {
 
 	constructor() {
 			// TODO
-			this.stateLabel = "Start";
 			this.editLabel = "Edit";
 
 			this.workCounter = new Counter(
-				new CounterLabel('Work for', '<', '>'),
-				new CounterLabel('Start Working', '<', '>'),
-				new CounterLabel('Work done', '!', '!'),
+				new CounterLabel('Work for', '<', '>', 'Pause'),
+				new CounterLabel('Start Working', '<', '>', 'Start'),
+				new CounterLabel('Work done', '!', '!', 'Go Walk'),
 				70, this);
 			this.pauseCounter = new Counter(
-				new CounterLabel('Walk for', '>', '<'),
-				new CounterLabel('Start Walking', '>', '<'),
-				new CounterLabel('Walk over', '$', '$'),
+				new CounterLabel('Walk for', '>', '<', 'Pause'),
+				new CounterLabel('Start Walking', '>', '<', 'Start'),
+				new CounterLabel('Walk over', '$', '$', 'Back To Work'),
 				30, this);
 			this.currentCounter = this.workCounter;
-			this.currentCounter.update();
+			this.currentCounter.updateDisplay();
 		}
 
-		onEdit(){}
+		public onEdit(){}
 
-		onToggle() {}
+		public onToggle() {
+			this.currentCounter.toggle();
+		}
+
+		public switchCounter() {
+			let newCounter : Counter;
+			if (this.currentCounter === this.workCounter) {
+				newCounter = this.pauseCounter;
+			} else {
+				newCounter = this.workCounter;
+			}
+			if (newCounter !== this.currentCounter) {
+				this.currentCounter = newCounter;
+				this.currentCounter.set();
+				this.currentCounter.updateDisplay();
+			}
+		}
 }

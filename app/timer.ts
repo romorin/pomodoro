@@ -4,5 +4,6 @@ export interface Timer {
 	leftDecoration: string;
 	rightDecoration: string;
 	stateLabel: string;
-	editLabel: string;
+
+	switchCounter() : void;
 }
