@@ -18,11 +18,19 @@ export class Counter {
 	}
 
 	public set() {
-		this.remaining = this.limit;
 		if (this.interval) {
 			this.stopInterval();
 		}
+		this.remaining = this.limit;
 		this.startCounting();
+	}
+
+	public reset() {
+		if (this.interval) {
+			this.stopInterval();
+		}
+		this.currentState = this.pausedLabel;
+		this.remaining = this.limit;
 	}
 
 	public updateDisplay() {

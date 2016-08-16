@@ -13,20 +13,22 @@ export class Pomodoro implements Timer {
 	public rightDecoration: string;
 	public stateLabel: string;
 	public editLabel: string;
+	public resetLabel: string;
 
 	constructor() {
 			// TODO
 			this.editLabel = "Edit";
+			this.resetLabel = "Reset";
 
 			this.workCounter = new Counter(
 				new CounterLabel('Work for', '<', '>', 'Pause'),
 				new CounterLabel('Start Working', '<', '>', 'Start'),
-				new CounterLabel('Work done', '!', '!', 'Go Walk'),
+				new CounterLabel('Work done', '$', '$', 'Go Walk'),
 				70, this);
 			this.pauseCounter = new Counter(
 				new CounterLabel('Walk for', '>', '<', 'Pause'),
 				new CounterLabel('Start Walking', '>', '<', 'Start'),
-				new CounterLabel('Walk over', '$', '$', 'Back To Work'),
+				new CounterLabel('Walk over', '!', '!', 'Back To Work'),
 				30, this);
 			this.currentCounter = this.workCounter;
 			this.currentCounter.updateDisplay();
@@ -36,6 +38,13 @@ export class Pomodoro implements Timer {
 
 		public onToggle() {
 			this.currentCounter.toggle();
+		}
+
+		public onReset() {
+			this.pauseCounter.reset();
+			this.workCounter.reset();
+			this.currentCounter = this.workCounter;
+			this.currentCounter.updateDisplay();
 		}
 
 		public switchCounter() {

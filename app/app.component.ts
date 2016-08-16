@@ -21,4 +21,8 @@ export class AppComponent {
 	public onToggle() {
 		this.pomodoro.onToggle();
 	}
+
+	public onReset() {
+		this.pomodoro.onReset();
+	}
 }
