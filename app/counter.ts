@@ -45,6 +45,7 @@ export class Counter {
 
 	private startCounting() {
 		this.currentState = this.runningLabel;
+		this.updateDisplay();
 		this.interval = setInterval(() => {
 			this.remaining -= 1;
 			if(this.remaining < 1) {

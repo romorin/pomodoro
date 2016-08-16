@@ -18,7 +18,7 @@
 }
 
 .timer-buttons > * {
-	margin: 0 10px;
+	margin: 0;
 }
 
 .timer-buttons button {
@@ -45,7 +45,6 @@
 	font-weight:bold;
 	font-style:normal;
 	height:28px;
-	width:60px;
 	text-decoration:none;
 	text-align:center;
 }
