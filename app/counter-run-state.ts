@@ -16,7 +16,7 @@ export class CounterRunState implements CounterState {
 		this.interval = null;
 	}
 
-	public set() {
+	public start() {
 		if (this.interval) {
 			this.stopInterval();
 		}

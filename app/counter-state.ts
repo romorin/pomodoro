@@ -1,5 +1,5 @@
 export interface CounterState {
-	set() : void;
+	start() : void;
 	reset() : void;
 	onStateExit() : void;
 	onStateEnter() : void;

@@ -32,8 +32,8 @@ export class Counter {
 		}
 	}
 
-	public set() {
-		this.currentState.set();
+	public start() {
+		this.currentState.start();
 	}
 
 	public reset() {

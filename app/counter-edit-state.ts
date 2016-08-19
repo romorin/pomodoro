@@ -12,7 +12,7 @@ export class CounterEditState implements CounterState{
 		this.originalLimit = context.limit;
 	}
 
-	set() {}
+	start() {}
 
 	reset() {
 		this.context.limit = this.originalLimit;
