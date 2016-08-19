@@ -10,7 +10,7 @@ export class CountdownSecondsPipe implements PipeTransform {
 		if (result < 10) {
 			return '0'+ result;
 		} else {
-			return result;
+			return (result.toString());
 		}
   }
 }

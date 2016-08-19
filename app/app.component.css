@@ -17,11 +17,7 @@
 	font-size: 40px;
 }
 
-.timer-buttons > * {
-	margin: 0;
-}
-
-.timer-buttons button {
+.timer-button {
 	-webkit-border-top-left-radius:0px;
 	-moz-border-radius-topleft:0px;
 	border-top-left-radius:0px;
@@ -37,6 +33,7 @@
 
 	text-indent:0;
 	border:0px;
+	margin: 0;
 
 	display:inline-block;
 	color:inherit;
@@ -48,7 +45,7 @@
 	text-decoration:none;
 	text-align:center;
 }
-.timer-buttons button:active {
+.timer-button:active {
 	position:relative;
 	top:1px;
 }

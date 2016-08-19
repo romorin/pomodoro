@@ -14,27 +14,30 @@ export class Pomodoro implements Timer {
 	public stateLabel: string;
 	public editLabel: string;
 	public resetLabel: string;
+	public editing = false;
 
 	constructor() {
-			// TODO
-			this.editLabel = "Edit";
-			this.resetLabel = "Reset";
-
 			this.workCounter = new Counter(
 				new CounterLabel('Work for', '<', '>', 'Pause'),
 				new CounterLabel('Start Working', '<', '>', 'Start'),
-				new CounterLabel('Work done', '$', '$', 'Go Walk'),
+				new CounterLabel('Walk time', '$', '$', 'Go Walk!'),
 				70, this);
 			this.pauseCounter = new Counter(
 				new CounterLabel('Walk for', '>', '<', 'Pause'),
 				new CounterLabel('Start Walking', '>', '<', 'Start'),
-				new CounterLabel('Walk over', '!', '!', 'Back To Work'),
+				new CounterLabel('Work time', '!', '!', 'Back To Work'),
 				30, this);
 			this.currentCounter = this.workCounter;
 			this.currentCounter.updateDisplay();
 		}
 
-		public onEdit(){}
+		public onEdit(){
+			this.editing = !this.editing;
+			this.pauseCounter.setEditing(this.editing);
+			this.workCounter.setEditing(this.editing);
+			this.currentCounter = this.workCounter;
+			this.currentCounter.updateDisplay();
+		}
 
 		public onToggle() {
 			this.currentCounter.toggle();
@@ -59,5 +62,18 @@ export class Pomodoro implements Timer {
 				this.currentCounter.set();
 				this.currentCounter.updateDisplay();
 			}
+		}
+
+		public incrementMin() {
+			this.currentCounter.incrementMin();
+		}
+		public decrementMin() {
+			this.currentCounter.decrementMin();
+		}
+		public incrementSec() {
+			this.currentCounter.incrementSec();
+		}
+		public decrementSec() {
+			this.currentCounter.decrementSec();
 		}
 }

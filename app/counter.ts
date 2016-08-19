@@ -1,76 +1,63 @@
 import { Timer } from './timer';
 import { CounterLabel } from './counter-label';
+import { CounterContext } from './counter-context';
+import { CounterState } from './counter-state';
+import { CounterRunState } from './counter-run-state';
+import { CounterEditState } from './counter-edit-state';
 
 export class Counter {
-	private currentState: CounterLabel;
-	private remaining: number;
-	private interval: any;
+	private context : CounterContext;
+	private runState : CounterState;
+	private editState : CounterState;
+	private currentState : CounterState;
 
-	constructor(
-			private runningLabel: CounterLabel,
-			private pausedLabel: CounterLabel,
-			private overLabel: CounterLabel,
-			private limit: number,
-			private timer: Timer) {
-		this.currentState = this.pausedLabel;
-		this.remaining = this.limit;
-		this.interval = null;
+	constructor( runningLabel: CounterLabel, pausedLabel: CounterLabel,
+			overLabel: CounterLabel, limit: number, timer: Timer) {
+		this.context = new CounterContext(runningLabel, pausedLabel, overLabel,
+				limit, timer);
+		this.runState = new CounterRunState(this.context);
+		this.editState = new CounterEditState(this.context);
+		this.currentState = this.runState;
+	}
+
+	public setEditing(editing: boolean) {
+		if (editing && this.currentState === this.runState) {
+			this.currentState.onStateExit();
+			this.currentState = this.editState;
+			this.currentState.onStateEnter();
+		} else if (!editing && this.currentState === this.editState){
+			this.currentState.onStateExit();
+			this.currentState = this.runState;
+			this.currentState.onStateEnter();
+		}
 	}
 
 	public set() {
-		if (this.interval) {
-			this.stopInterval();
-		}
-		this.remaining = this.limit;
-		this.startCounting();
+		this.currentState.set();
 	}
 
 	public reset() {
-		if (this.interval) {
-			this.stopInterval();
-		}
-		this.currentState = this.pausedLabel;
-		this.remaining = this.limit;
+		this.currentState.reset();
 	}
 
 	public updateDisplay() {
-		this.timer.statusLabel = this.currentState.title;
-		this.timer.countdown = this.remaining;
-		this.timer.leftDecoration = this.currentState.leftDecoration;
-		this.timer.rightDecoration = this.currentState.rightDecoration;
-		this.timer.stateLabel = this.currentState.toggleLabel;
+		this.currentState.updateDisplay();
 	}
 
 	public toggle() {
-		if (this.currentState === this.pausedLabel) {
-			this.startCounting();
-		} else if (this.currentState === this.runningLabel) {
-			this.stopCounting();
-		} else if (this.currentState === this.overLabel) {
-			this.timer.switchCounter();
-		}
+		this.currentState.toggle();
 	}
 
-	private startCounting() {
-		this.currentState = this.runningLabel;
-		this.updateDisplay();
-		this.interval = setInterval(() => {
-			this.remaining -= 1;
-			if(this.remaining < 1) {
-				this.stopInterval();
-				this.currentState = this.overLabel;
-			}
-			this.updateDisplay();
-		}, 1000);
+	public incrementMin() {
+		this.currentState.incrementMin();
 	}
-
-	private stopCounting() {
-		this.currentState = this.pausedLabel;
-		this.stopInterval();
+	public decrementMin() {
+		this.currentState.decrementMin();
 	}
-
-	private stopInterval() {
-		clearInterval(this.interval);
-		this.interval = null;
+	public incrementSec() {
+		this.currentState.incrementSec();
+	}
+	public decrementSec() {
+		this.currentState.decrementSec();
 	}
 }
