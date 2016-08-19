@@ -1,21 +1,21 @@
 <div class="timer">
 	<h1>{{pomodoro.statusLabel}}</h1>
 	<div class="counter">
-		<span *ngIf="pomodoro.editing">
-			<button class="timer-button" (click)="incrementMin()"><</button>
-			<button class="timer-button" (click)="decrementMin()">></button>
-		</span>
-		<span *ngIf="! pomodoro.editing">{{pomodoro.leftDecoration}}</span>
-		<span>{{pomodoro.countdown | minutes}}</span>
+		<div *ngIf="pomodoro.editing">
+			<button class="timer-button" (click)="incrementMin()">&and;</button>
+			<button class="timer-button" (click)="decrementMin()">&or;</button>
+		</div>
+		<div *ngIf="! pomodoro.editing">{{pomodoro.leftDecoration}}</div>
+		<div>{{pomodoro.countdown | minutes}}</div>
 		:
-		<span>{{pomodoro.countdown | seconds}}</span>
-		<span *ngIf="pomodoro.editing">
-			<button class="timer-button" (click)="incrementSec()"><</button>
-			<button class="timer-button" (click)="decrementSec()">></button>
-		</span>
-		<span *ngIf="! pomodoro.editing">{{pomodoro.rightDecoration}}</span>
+		<div>{{pomodoro.countdown | seconds}}</div>
+		<div *ngIf="pomodoro.editing">
+			<button class="timer-button" (click)="incrementSec()">&and;</button>
+			<button class="timer-button" (click)="decrementSec()">&or;</button>
+		</div>
+		<div *ngIf="! pomodoro.editing">{{pomodoro.rightDecoration}}</div>
 	</div>
-	<div>
+	<div class="action-buttons">
 		<button class="timer-button" (click)="onToggle()">[{{pomodoro.stateLabel}}]</button>
 		<button class="timer-button" (click)="onReset()">[{{pomodoro.resetLabel}}]</button>
 		<button class="timer-button" (click)="onEdit()">[{{pomodoro.editLabel}}]</button>
