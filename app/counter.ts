@@ -22,11 +22,7 @@ export class Counter implements CounterContext {
 		pausedDecorations: CounterDecoration,
 		overDecorations: CounterDecoration
 	) {
-		this.decorations[CounterStatus.Running] = runningDecorations;
-		this.decorations[CounterStatus.Paused] = pausedDecorations;
-		this.decorations[CounterStatus.Over] = overDecorations;
-
-		this.runState = new CounterRunState(this);
+		this.runState = new CounterRunState(this, runningDecorations, pausedDecorations, overDecorations);
 		this.editState = new CounterEditState(this);
 		this.currentState = this.runState;
 	}

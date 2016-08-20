@@ -1,6 +1,7 @@
 import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
 import { CounterStatus } from './counter-status';
+import { CounterDecoration } from './counter-decoration';
 
 export class CounterRunState implements CounterState {
 	private static get EDIT_LABEL():string { return "Edit"; }
@@ -9,11 +10,19 @@ export class CounterRunState implements CounterState {
 	private currentStatus: CounterStatus;
 	private remaining: number;
 	private interval: any;
+	private decorations: {[status: number]: CounterDecoration} = {};
 
-	constructor( private context: CounterContext ) {
+	constructor( private context: CounterContext,
+			runningDecorations: CounterDecoration,
+			pausedDecorations: CounterDecoration,
+			overDecorations: CounterDecoration ) {
 		this.currentStatus = CounterStatus.Paused;
 		this.remaining = this.context.limit;
 		this.interval = null;
+
+		this.decorations[CounterStatus.Running] = runningDecorations;
+		this.decorations[CounterStatus.Paused] = pausedDecorations;
+		this.decorations[CounterStatus.Over] = overDecorations;
 	}
 
 	public start() {
@@ -42,6 +51,8 @@ export class CounterRunState implements CounterState {
 
 	public updateDisplay() {
 		this.context.timer.applyTemplates(this.currentStatus, this.context.id, this.context.nextId);
+		this.context.timer.leftDecoration = this.decorations[this.currentStatus].left;
+		this.context.timer.rightDecoration = this.decorations[this.currentStatus].right;
 		this.context.timer.countdown = this.remaining;
 		this.context.timer.editLabel = CounterRunState.EDIT_LABEL;
 		this.context.timer.resetLabel = CounterRunState.RESET_LABEL;

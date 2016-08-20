@@ -7,6 +7,4 @@ export interface CounterContext {
 	timer: Timer;
 	id: CounterId,
 	nextId: CounterId,
-
-	decorate(status: CounterStatus): void;
 }
