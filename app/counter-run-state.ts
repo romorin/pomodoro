@@ -1,17 +1,17 @@
 import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
-import { CounterLabel } from './counter-label';
+import { CounterStatus } from './counter-status';
 
 export class CounterRunState implements CounterState {
 	private static get EDIT_LABEL():string { return "Edit"; }
 	private static get RESET_LABEL():string { return "Reset"; }
 
-	private currentState: CounterLabel;
+	private currentStatus: CounterStatus;
 	private remaining: number;
 	private interval: any;
 
 	constructor( private context: CounterContext ) {
-		this.currentState = this.context.pausedLabel;
+		this.currentStatus = CounterStatus.Paused;
 		this.remaining = this.context.limit;
 		this.interval = null;
 	}
@@ -28,7 +28,7 @@ export class CounterRunState implements CounterState {
 		if (this.interval) {
 			this.stopInterval();
 		}
-		this.currentState = this.context.pausedLabel;
+		this.currentStatus = CounterStatus.Paused;
 		this.remaining = this.context.limit;
 	}
 
@@ -41,21 +41,18 @@ export class CounterRunState implements CounterState {
 	}
 
 	public updateDisplay() {
-		this.context.timer.statusLabel = this.currentState.title;
+		this.context.timer.applyTemplates(this.currentStatus, this.context.id, this.context.nextId);
 		this.context.timer.countdown = this.remaining;
-		this.context.timer.leftDecoration = this.currentState.leftDecoration;
-		this.context.timer.rightDecoration = this.currentState.rightDecoration;
-		this.context.timer.stateLabel = this.currentState.toggleLabel;
 		this.context.timer.editLabel = CounterRunState.EDIT_LABEL;
 		this.context.timer.resetLabel = CounterRunState.RESET_LABEL;
 	}
 
 	public toggle() {
-		if (this.currentState === this.context.pausedLabel) {
+		if (this.currentStatus === CounterStatus.Paused) {
 			this.startCounting();
-		} else if (this.currentState === this.context.runningLabel) {
+		} else if (this.currentStatus ===  CounterStatus.Running) {
 			this.stopCounting();
-		} else if (this.currentState === this.context.overLabel) {
+		} else if (this.currentStatus ===  CounterStatus.Over) {
 			this.context.timer.switchCounter();
 		}
 	}
@@ -66,20 +63,20 @@ export class CounterRunState implements CounterState {
 	public decrementSec() {}
 
 	private startCounting() {
-		this.currentState = this.context.runningLabel;
+		this.currentStatus = CounterStatus.Running;
 		this.updateDisplay();
 		this.interval = setInterval(() => {
 			this.remaining -= 1;
 			if(this.remaining < 1) {
 				this.stopInterval();
-				this.currentState = this.context.overLabel;
+				this.currentStatus = CounterStatus.Over;
 			}
 			this.updateDisplay();
 		}, 1000);
 	}
 
 	private stopCounting() {
-		this.currentState = this.context.pausedLabel;
+		this.currentStatus = CounterStatus.Paused;
 		this.stopInterval();
 	}
 

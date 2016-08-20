@@ -1,23 +1,39 @@
 import { Timer } from './timer';
-import { CounterLabel } from './counter-label';
 import { CounterContext } from './counter-context';
+import { CounterDecoration } from './counter-decoration';
 import { CounterState } from './counter-state';
 import { CounterRunState } from './counter-run-state';
 import { CounterEditState } from './counter-edit-state';
+import { CounterId } from './counter-id';
+import { CounterStatus } from './counter-status';
 
-export class Counter {
-	private context : CounterContext;
+export class Counter implements CounterContext {
 	private runState : CounterState;
 	private editState : CounterState;
 	private currentState : CounterState;
+	private decorations: {[status: number]: CounterDecoration} = {};
 
-	constructor( runningLabel: CounterLabel, pausedLabel: CounterLabel,
-			overLabel: CounterLabel, limit: number, timer: Timer) {
-		this.context = new CounterContext(runningLabel, pausedLabel, overLabel,
-				limit, timer);
-		this.runState = new CounterRunState(this.context);
-		this.editState = new CounterEditState(this.context);
+	constructor(
+		public limit: number,
+		public timer: Timer,
+		public id: CounterId,
+		public nextId: CounterId,
+		runningDecorations: CounterDecoration,
+		pausedDecorations: CounterDecoration,
+		overDecorations: CounterDecoration
+	) {
+		this.decorations[CounterStatus.Running] = runningDecorations;
+		this.decorations[CounterStatus.Paused] = pausedDecorations;
+		this.decorations[CounterStatus.Over] = overDecorations;
+
+		this.runState = new CounterRunState(this);
+		this.editState = new CounterEditState(this);
 		this.currentState = this.runState;
+	}
+
+	public decorate(status: CounterStatus) {
+		this.timer.leftDecoration = this.decorations[status].left;
+		this.timer.rightDecoration = this.decorations[status].right;
 	}
 
 	public setEditing(editing: boolean) {
@@ -35,19 +51,15 @@ export class Counter {
 	public start() {
 		this.currentState.start();
 	}
-
 	public reset() {
 		this.currentState.reset();
 	}
-
 	public updateDisplay() {
 		this.currentState.updateDisplay();
 	}
-
 	public toggle() {
 		this.currentState.toggle();
 	}
-
 	public incrementMin() {
 		this.currentState.incrementMin();
 	}

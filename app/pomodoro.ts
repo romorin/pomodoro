@@ -1,6 +1,9 @@
 import { Timer } from './timer';
 import { Counter } from './counter';
-import { CounterLabel } from './counter-label';
+import { CounterId } from './counter-id';
+import { CounterStatus } from './counter-status';
+import { CounterTemplate } from './counter-template';
+import { CounterDecoration } from './counter-decoration';
 
 export class Pomodoro implements Timer {
 	private workCounter: Counter;
@@ -16,64 +19,84 @@ export class Pomodoro implements Timer {
 	public resetLabel: string;
 	public editing = false;
 
+	private templates: {[status: number]: CounterTemplate} = {};
+	private verbs: {[id: number]: string} = {};
+
 	constructor() {
-			this.workCounter = new Counter(
-				new CounterLabel('Work for', '<', '>', 'Pause'),
-				new CounterLabel('Start Working', '<', '>', 'Start'),
-				new CounterLabel('Walk time', '$', '$', 'Go Walk!'),
-				70, this);
-			this.pauseCounter = new Counter(
-				new CounterLabel('Walk for', '>', '<', 'Pause'),
-				new CounterLabel('Start Walking', '>', '<', 'Start'),
-				new CounterLabel('Work time', '!', '!', 'Back To Work'),
-				30, this);
-			this.currentCounter = this.workCounter;
-			this.currentCounter.updateDisplay();
-		}
+		this.templates[CounterStatus.Running] =	new CounterTemplate("@ for", "Pause");
+		this.templates[CounterStatus.Paused] = new CounterTemplate("Start @", "Go!");
+		this.templates[CounterStatus.Over] = new CounterTemplate("# time", "#");
+		this.verbs[CounterId.Work] = "Work";
+		this.verbs[CounterId.Pause] = "Pause";
 
-		public onEdit(){
-			this.editing = !this.editing;
-			this.pauseCounter.setEditing(this.editing);
-			this.workCounter.setEditing(this.editing);
-			this.currentCounter = this.workCounter;
-			this.currentCounter.updateDisplay();
-		}
+		this.workCounter = new Counter(
+			70, this, CounterId.Work, CounterId.Pause,
+			new CounterDecoration('<', '>'),
+			new CounterDecoration('<', '>'),
+			new CounterDecoration('!', '!'));
+		this.pauseCounter = new Counter(
+			30, this, CounterId.Pause, CounterId.Work,
+			new CounterDecoration('>', '<'),
+			new CounterDecoration('>', '<'),
+			new CounterDecoration('$', '$'));
+		this.currentCounter = this.workCounter;
+		this.currentCounter.updateDisplay();
+	}
 
-		public onToggle() {
-			this.currentCounter.toggle();
-		}
+	public onEdit(){
+		this.editing = !this.editing;
+		this.pauseCounter.setEditing(this.editing);
+		this.workCounter.setEditing(this.editing);
+		this.currentCounter = this.workCounter;
+		this.currentCounter.updateDisplay();
+	}
 
-		public onReset() {
-			this.pauseCounter.reset();
-			this.workCounter.reset();
-			this.currentCounter = this.workCounter;
-			this.currentCounter.updateDisplay();
-		}
+	public onToggle() {
+		this.currentCounter.toggle();
+		this.currentCounter.updateDisplay();
+	}
 
-		public switchCounter() {
-			let newCounter : Counter;
-			if (this.currentCounter === this.workCounter) {
-				newCounter = this.pauseCounter;
-			} else {
-				newCounter = this.workCounter;
-			}
-			if (newCounter !== this.currentCounter) {
-				this.currentCounter = newCounter;
-				this.currentCounter.start();
-				this.currentCounter.updateDisplay();
-			}
-		}
+	public onReset() {
+		this.pauseCounter.reset();
+		this.workCounter.reset();
+		this.currentCounter = this.workCounter;
+		this.currentCounter.updateDisplay();
+	}
 
-		public incrementMin() {
-			this.currentCounter.incrementMin();
+	public incrementMin() {
+		this.currentCounter.incrementMin();
+	}
+	public decrementMin() {
+		this.currentCounter.decrementMin();
+	}
+	public incrementSec() {
+		this.currentCounter.incrementSec();
+	}
+	public decrementSec() {
+		this.currentCounter.decrementSec();
+	}
+
+	public switchCounter() {
+		let newCounter : Counter;
+		if (this.currentCounter === this.workCounter) {
+			newCounter = this.pauseCounter;
+		} else {
+			newCounter = this.workCounter;
 		}
-		public decrementMin() {
-			this.currentCounter.decrementMin();
+		if (newCounter !== this.currentCounter) {
+			this.currentCounter = newCounter;
+			this.currentCounter.start();
 		}
-		public incrementSec() {
-			this.currentCounter.incrementSec();
-		}
-		public decrementSec() {
-			this.currentCounter.decrementSec();
-		}
+	}
+
+	public applyTemplates(status: CounterStatus, current: CounterId, next: CounterId) {
+		this.statusLabel = this.templates[status].titleLabel.replace('@', this.verbs[current]).
+				replace('#', this.verbs[next]);
+		this.stateLabel = this.templates[status].toggleButtonLabel.replace('@', this.verbs[current]).
+				replace('#', this.verbs[next]);
+	}
+
+	public getVerb(id:CounterId) {
+		return this.verbs[id];
+	}
 }

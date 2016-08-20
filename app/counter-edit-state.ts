@@ -1,5 +1,6 @@
 import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
+import { CounterStatus } from './counter-status';
 
 export class CounterEditState implements CounterState{
 	private static get TOGGLE_LABEL():string { return "Next"; }
@@ -26,8 +27,9 @@ export class CounterEditState implements CounterState{
 	}
 
 	updateDisplay() {
-		this.context.timer.statusLabel = this.context.pausedLabel.title;
+		this.context.timer.statusLabel = this.context.timer.getVerb(this.context.id);
 		this.context.timer.countdown = this.context.limit;
+		this.context.decorate(CounterStatus.Paused);
 		this.context.timer.stateLabel = CounterEditState.TOGGLE_LABEL;
 		this.context.timer.editLabel = CounterEditState.EDIT_LABEL;
 		this.context.timer.resetLabel = CounterEditState.RESET_LABEL;

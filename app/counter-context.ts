@@ -1,12 +1,12 @@
-import { CounterLabel } from './counter-label';
 import { Timer } from './timer';
+import { CounterStatus } from './counter-status';
+import { CounterId } from './counter-id';
 
-export class CounterContext {
-	constructor(
-		public runningLabel: CounterLabel,
-		public pausedLabel: CounterLabel,
-		public overLabel: CounterLabel,
-		public limit: number,
-		public timer: Timer
-	){}
+export interface CounterContext {
+	limit: number;
+	timer: Timer;
+	id: CounterId,
+	nextId: CounterId,
+
+	decorate(status: CounterStatus): void;
 }
