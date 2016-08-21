@@ -61,9 +61,8 @@ export class Pomodoro implements Timer {
 		} else {
 			newCounter = this.workCounter;
 		}
-		if (newCounter !== this.currentCounter) {
-			this.currentCounter = newCounter;
-			this.currentCounter.start(this);
-		}
+		this.currentCounter.onCounterExit(this);
+		this.currentCounter = newCounter;
+		this.currentCounter.onCounterEnter(this);
 	}
 }

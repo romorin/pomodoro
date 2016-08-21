@@ -10,24 +10,50 @@ export class CounterEditState implements CounterState{
 	private static get RESET_LABEL():string { return "Cancel"; }
 
 	private originalLimit : number;
+	private originalVerb : string;
+	private titleLabelSet = false;
 
 	constructor(private timerLabelGenerator: TimerLabelGenerator) {}
 
-	start(counter: CounterContext, timer: Timer) {}
-
 	reset(counter: CounterContext, timer: Timer) {
-		counter.limit = this.originalLimit;
+		if(counter.limit) {
+			counter.limit = this.originalLimit;
+		}
+		if (this.originalVerb) {
+			this.timerLabelGenerator.setVerb(counter.id, this.originalVerb);
+			this.titleLabelSet = false;
+		}
 	}
 
 	onStateExit(counter: CounterContext, timer: Timer) {
+		if (this.titleLabelSet) {
+			this.timerLabelGenerator.setVerb(counter.id, timer.statusLabel);
+			this.titleLabelSet = false;
+		}
 	}
 
 	onStateEnter(counter: CounterContext, timer: Timer) {
 		this.originalLimit = counter.limit;
+		this.originalVerb = this.timerLabelGenerator.getVerb(counter.id);
+	}
+
+	onCounterEnter(counter: CounterContext, timer: Timer) {
+		timer.statusLabel = this.timerLabelGenerator.getVerb(counter.id);
+		this.titleLabelSet = true;
+	}
+
+	onCounterExit(counter: CounterContext, timer: Timer) {
+		if (this.titleLabelSet) {
+			this.timerLabelGenerator.setVerb(counter.id, timer.statusLabel);
+			this.titleLabelSet = false;
+		}
 	}
 
 	updateDisplay(counter: CounterContext, timer: Timer) {
-		timer.statusLabel = this.timerLabelGenerator.getVerb(counter.id);
+		if(!this.titleLabelSet) {
+			timer.statusLabel = this.timerLabelGenerator.getVerb(counter.id);
+			this.titleLabelSet = true;
+		}
 		timer.countdown = counter.limit;
 		timer.stateLabel = CounterEditState.TOGGLE_LABEL;
 		timer.editLabel = CounterEditState.EDIT_LABEL;

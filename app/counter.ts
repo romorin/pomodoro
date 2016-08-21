@@ -32,9 +32,6 @@ export class Counter implements CounterContext {
 		}
 	}
 
-	public start(timer: Timer) {
-		this.currentState.start(this, timer);
-	}
 	public reset(timer: Timer) {
 		this.currentState.reset(this, timer);
 	}
@@ -55,5 +52,11 @@ export class Counter implements CounterContext {
 	}
 	public decrementSec(timer: Timer) {
 		this.currentState.decrementSec(this, timer);
+	}
+	public onCounterEnter(timer: Timer) {
+		this.currentState.onCounterEnter(this, timer);
+	}
+	public onCounterExit(timer: Timer) {
+		this.currentState.onCounterExit(this, timer);
 	}
 }

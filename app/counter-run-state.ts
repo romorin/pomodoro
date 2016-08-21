@@ -27,14 +27,6 @@ export class CounterRunState implements CounterState {
 		this.decorations[CounterStatus.Over] = overDecorations;
 	}
 
-	public start(counter: CounterContext, timer: Timer) {
-		if (this.interval) {
-			this.stopInterval(counter, timer);
-		}
-		this.remaining = counter.limit;
-		this.startCounting(counter, timer);
-	}
-
 	public reset(counter: CounterContext, timer: Timer) {
 		if (this.interval) {
 			this.stopInterval(counter, timer);
@@ -48,7 +40,19 @@ export class CounterRunState implements CounterState {
 	}
 
 	onStateEnter(counter: CounterContext, timer: Timer) {
-		this.reset(counter, timer);
+		this.remaining = counter.limit;
+	}
+
+	onCounterEnter(counter: CounterContext, timer: Timer) {
+		if (this.interval) {
+			this.stopInterval(counter, timer);
+		}
+		this.remaining = counter.limit;
+		this.startCounting(counter, timer);
+	}
+
+	onCounterExit(counter: CounterContext, timer: Timer) {
+
 	}
 
 	public updateDisplay(counter: CounterContext, timer: Timer) {

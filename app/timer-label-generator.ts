@@ -32,4 +32,8 @@ export class TimerLabelGenerator {
 	public getVerb(id:CounterId) {
 		return this.verbs[id];
 	}
+
+	public setVerb(id:CounterId, newVerb: string) {
+		this.verbs[id] = newVerb;
+	}
 }
