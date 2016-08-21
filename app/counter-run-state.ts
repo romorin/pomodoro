@@ -2,6 +2,7 @@ import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
 import { CounterStatus } from './counter-status';
 import { CounterDecoration } from './counter-decoration';
+import { Timer } from './timer';
 
 export class CounterRunState implements CounterState {
 	private static get EDIT_LABEL():string { return "Edit"; }
@@ -12,12 +13,11 @@ export class CounterRunState implements CounterState {
 	private interval: any;
 	private decorations: {[status: number]: CounterDecoration} = {};
 
-	constructor( private context: CounterContext,
-			runningDecorations: CounterDecoration,
+	constructor( runningDecorations: CounterDecoration,
 			pausedDecorations: CounterDecoration,
 			overDecorations: CounterDecoration ) {
 		this.currentStatus = CounterStatus.Paused;
-		this.remaining = this.context.limit;
+		this.remaining = null;
 		this.interval = null;
 
 		this.decorations[CounterStatus.Running] = runningDecorations;
@@ -25,73 +25,76 @@ export class CounterRunState implements CounterState {
 		this.decorations[CounterStatus.Over] = overDecorations;
 	}
 
-	public start() {
+	public start(counter: CounterContext, timer: Timer) {
 		if (this.interval) {
-			this.stopInterval();
+			this.stopInterval(counter, timer);
 		}
-		this.remaining = this.context.limit;
-		this.startCounting();
+		this.remaining = counter.limit;
+		this.startCounting(counter, timer);
 	}
 
-	public reset() {
+	public reset(counter: CounterContext, timer: Timer) {
 		if (this.interval) {
-			this.stopInterval();
+			this.stopInterval(counter, timer);
 		}
 		this.currentStatus = CounterStatus.Paused;
-		this.remaining = this.context.limit;
+		this.remaining = counter.limit;
 	}
 
-	onStateExit() {
-		this.reset();
+	onStateExit(counter: CounterContext, timer: Timer) {
+		this.reset(counter, timer);
 	}
 
-	onStateEnter() {
-		this.reset();
+	onStateEnter(counter: CounterContext, timer: Timer) {
+		this.reset(counter, timer);
 	}
 
-	public updateDisplay() {
-		this.context.timer.applyTemplates(this.currentStatus, this.context.id, this.context.nextId);
-		this.context.timer.leftDecoration = this.decorations[this.currentStatus].left;
-		this.context.timer.rightDecoration = this.decorations[this.currentStatus].right;
-		this.context.timer.countdown = this.remaining;
-		this.context.timer.editLabel = CounterRunState.EDIT_LABEL;
-		this.context.timer.resetLabel = CounterRunState.RESET_LABEL;
+	public updateDisplay(counter: CounterContext, timer: Timer) {
+		timer.applyTemplates(this.currentStatus, counter.id, counter.nextId);
+		timer.leftDecoration = this.decorations[this.currentStatus].left;
+		timer.rightDecoration = this.decorations[this.currentStatus].right;
+		timer.countdown = this.remaining !== null ? this.remaining : counter.limit;
+		timer.editLabel = CounterRunState.EDIT_LABEL;
+		timer.resetLabel = CounterRunState.RESET_LABEL;
 	}
 
-	public toggle() {
+	public toggle(counter: CounterContext, timer: Timer) {
 		if (this.currentStatus === CounterStatus.Paused) {
-			this.startCounting();
+			this.startCounting(counter, timer);
 		} else if (this.currentStatus ===  CounterStatus.Running) {
-			this.stopCounting();
+			this.stopCounting(counter, timer);
 		} else if (this.currentStatus ===  CounterStatus.Over) {
-			this.context.timer.switchCounter();
+			timer.switchCounter();
 		}
 	}
 
-	public incrementMin() {}
-	public decrementMin() {}
-	public incrementSec() {}
-	public decrementSec() {}
+	public incrementMin(counter: CounterContext, timer: Timer) {}
+	public decrementMin(counter: CounterContext, timer: Timer) {}
+	public incrementSec(counter: CounterContext, timer: Timer) {}
+	public decrementSec(counter: CounterContext, timer: Timer) {}
 
-	private startCounting() {
+	private startCounting(counter: CounterContext, timer: Timer) {
+		if (this.remaining === null) {
+			this.remaining = counter.limit;
+		}
 		this.currentStatus = CounterStatus.Running;
-		this.updateDisplay();
+		this.updateDisplay(counter, timer);
 		this.interval = setInterval(() => {
 			this.remaining -= 1;
 			if(this.remaining < 1) {
-				this.stopInterval();
+				this.stopInterval(counter, timer);
 				this.currentStatus = CounterStatus.Over;
 			}
-			this.updateDisplay();
+			this.updateDisplay(counter, timer);
 		}, 1000);
 	}
 
-	private stopCounting() {
+	private stopCounting(counter: CounterContext, timer: Timer) {
 		this.currentStatus = CounterStatus.Paused;
-		this.stopInterval();
+		this.stopInterval(counter, timer);
 	}
 
-	private stopInterval() {
+	private stopInterval(counter: CounterContext, timer: Timer) {
 		clearInterval(this.interval);
 		this.interval = null;
 	}

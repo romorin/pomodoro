@@ -8,64 +8,52 @@ import { CounterId } from './counter-id';
 import { CounterStatus } from './counter-status';
 
 export class Counter implements CounterContext {
-	private runState : CounterState;
-	private editState : CounterState;
 	private currentState : CounterState;
-	private decorations: {[status: number]: CounterDecoration} = {};
 
 	constructor(
 		public limit: number,
-		public timer: Timer,
 		public id: CounterId,
 		public nextId: CounterId,
-		runningDecorations: CounterDecoration,
-		pausedDecorations: CounterDecoration,
-		overDecorations: CounterDecoration
+		private runState : CounterState,
+		private editState : CounterState
 	) {
-		this.runState = new CounterRunState(this, runningDecorations, pausedDecorations, overDecorations);
-		this.editState = new CounterEditState(this);
 		this.currentState = this.runState;
 	}
 
-	public decorate(status: CounterStatus) {
-		this.timer.leftDecoration = this.decorations[status].left;
-		this.timer.rightDecoration = this.decorations[status].right;
-	}
-
-	public setEditing(editing: boolean) {
+	public setEditing( timer: Timer, editing: boolean) {
 		if (editing && this.currentState === this.runState) {
-			this.currentState.onStateExit();
+			this.currentState.onStateExit(this, timer);
 			this.currentState = this.editState;
-			this.currentState.onStateEnter();
+			this.currentState.onStateEnter(this, timer);
 		} else if (!editing && this.currentState === this.editState){
-			this.currentState.onStateExit();
+			this.currentState.onStateExit(this, timer);
 			this.currentState = this.runState;
-			this.currentState.onStateEnter();
+			this.currentState.onStateEnter(this, timer);
 		}
 	}
 
-	public start() {
-		this.currentState.start();
+	public start(timer: Timer) {
+		this.currentState.start(this, timer);
 	}
-	public reset() {
-		this.currentState.reset();
+	public reset(timer: Timer) {
+		this.currentState.reset(this, timer);
 	}
-	public updateDisplay() {
-		this.currentState.updateDisplay();
+	public updateDisplay(timer: Timer) {
+		this.currentState.updateDisplay(this, timer);
 	}
-	public toggle() {
-		this.currentState.toggle();
+	public toggle(timer: Timer) {
+		this.currentState.toggle(this, timer);
 	}
-	public incrementMin() {
-		this.currentState.incrementMin();
+	public incrementMin(timer: Timer) {
+		this.currentState.incrementMin(this, timer);
 	}
-	public decrementMin() {
-		this.currentState.decrementMin();
+	public decrementMin(timer: Timer) {
+		this.currentState.decrementMin(this, timer);
 	}
-	public incrementSec() {
-		this.currentState.incrementSec();
+	public incrementSec(timer: Timer) {
+		this.currentState.incrementSec(this, timer);
 	}
-	public decrementSec() {
-		this.currentState.decrementSec();
+	public decrementSec(timer: Timer) {
+		this.currentState.decrementSec(this, timer);
 	}
 }

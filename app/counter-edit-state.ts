@@ -1,6 +1,7 @@
 import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
 import { CounterStatus } from './counter-status';
+import { Timer } from './timer';
 
 export class CounterEditState implements CounterState{
 	private static get TOGGLE_LABEL():string { return "Next"; }
@@ -9,59 +10,56 @@ export class CounterEditState implements CounterState{
 
 	private originalLimit : number;
 
-	constructor( private context: CounterContext ) {
-		this.originalLimit = context.limit;
+	constructor() {}
+
+	start(counter: CounterContext, timer: Timer) {}
+
+	reset(counter: CounterContext, timer: Timer) {
+		counter.limit = this.originalLimit;
 	}
 
-	start() {}
-
-	reset() {
-		this.context.limit = this.originalLimit;
+	onStateExit(counter: CounterContext, timer: Timer) {
 	}
 
-	onStateExit() {
+	onStateEnter(counter: CounterContext, timer: Timer) {
+		this.originalLimit = counter.limit;
 	}
 
-	onStateEnter() {
-		this.originalLimit = this.context.limit;
+	updateDisplay(counter: CounterContext, timer: Timer) {
+		timer.statusLabel = timer.getVerb(counter.id);
+		timer.countdown = counter.limit;
+		timer.stateLabel = CounterEditState.TOGGLE_LABEL;
+		timer.editLabel = CounterEditState.EDIT_LABEL;
+		timer.resetLabel = CounterEditState.RESET_LABEL;
 	}
 
-	updateDisplay() {
-		this.context.timer.statusLabel = this.context.timer.getVerb(this.context.id);
-		this.context.timer.countdown = this.context.limit;
-		this.context.decorate(CounterStatus.Paused);
-		this.context.timer.stateLabel = CounterEditState.TOGGLE_LABEL;
-		this.context.timer.editLabel = CounterEditState.EDIT_LABEL;
-		this.context.timer.resetLabel = CounterEditState.RESET_LABEL;
+	toggle(counter: CounterContext, timer: Timer) {
+		timer.switchCounter();
 	}
 
-	toggle() {
-		this.context.timer.switchCounter();
+	incrementMin(counter: CounterContext, timer: Timer) {
+		counter.limit += 60;
+		this.updateDisplay(counter, timer);
 	}
 
-	incrementMin() {
-		this.context.limit += 60;
-		this.updateDisplay();
-	}
-
-	decrementMin() {
-		if (this.context.limit > 60) {
-			this.context.limit -= 60;
+	decrementMin(counter: CounterContext, timer: Timer) {
+		if (counter.limit > 60) {
+			counter.limit -= 60;
 		} else {
-			this.context.limit = 1;
+			counter.limit = 1;
 		}
-		this.updateDisplay();
+		this.updateDisplay(counter, timer);
 	}
 
-	incrementSec() {
-		this.context.limit += 1;
-		this.updateDisplay();
+	incrementSec(counter: CounterContext, timer: Timer) {
+		counter.limit += 1;
+		this.updateDisplay(counter, timer);
 	}
 
-	decrementSec() {
-		if (this.context.limit > 1) {
-			this.context.limit -= 1;
-			this.updateDisplay();
+	decrementSec(counter: CounterContext, timer: Timer) {
+		if (counter.limit > 1) {
+			counter.limit -= 1;
+			this.updateDisplay(counter, timer);
 		}
 	}
 }

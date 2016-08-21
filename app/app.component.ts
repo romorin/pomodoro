@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Pomodoro } from './pomodoro';
+import { PomodoroInitializer } from './pomodoro-initializer';
 
 @Component({
     selector: 'my-app',
@@ -11,7 +12,7 @@ export class AppComponent {
 	pomodoro: Pomodoro;
 
 	constructor() {
-		this.pomodoro = new Pomodoro();
+		this.pomodoro = new PomodoroInitializer().init();
 	}
 
 	public onEdit(){ this.pomodoro.onEdit(); }
