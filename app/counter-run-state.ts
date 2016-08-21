@@ -3,6 +3,7 @@ import { CounterContext } from './counter-context';
 import { CounterStatus } from './counter-status';
 import { CounterDecoration } from './counter-decoration';
 import { Timer } from './timer';
+import { TimerLabelGenerator } from './timer-label-generator';
 
 export class CounterRunState implements CounterState {
 	private static get EDIT_LABEL():string { return "Edit"; }
@@ -13,7 +14,8 @@ export class CounterRunState implements CounterState {
 	private interval: any;
 	private decorations: {[status: number]: CounterDecoration} = {};
 
-	constructor( runningDecorations: CounterDecoration,
+	constructor( private timerLabelGenerator: TimerLabelGenerator,
+			runningDecorations: CounterDecoration,
 			pausedDecorations: CounterDecoration,
 			overDecorations: CounterDecoration ) {
 		this.currentStatus = CounterStatus.Paused;
@@ -50,7 +52,7 @@ export class CounterRunState implements CounterState {
 	}
 
 	public updateDisplay(counter: CounterContext, timer: Timer) {
-		timer.applyTemplates(this.currentStatus, counter.id, counter.nextId);
+		this.timerLabelGenerator.applyTemplates(timer, counter, this.currentStatus);
 		timer.leftDecoration = this.decorations[this.currentStatus].left;
 		timer.rightDecoration = this.decorations[this.currentStatus].right;
 		timer.countdown = this.remaining !== null ? this.remaining : counter.limit;

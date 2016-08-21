@@ -2,7 +2,6 @@ import { Timer } from './timer';
 import { Counter } from './counter';
 import { CounterId } from './counter-id';
 import { CounterStatus } from './counter-status';
-import { CounterTemplate } from './counter-template';
 import { CounterDecoration } from './counter-decoration';
 
 export class Pomodoro implements Timer {
@@ -17,16 +16,7 @@ export class Pomodoro implements Timer {
 	public resetLabel: string;
 	public editing = false;
 
-	private templates: {[status: number]: CounterTemplate} = {};
-	private verbs: {[id: number]: string} = {};
-
 	constructor(private workCounter: Counter, private pauseCounter: Counter) {
-		this.templates[CounterStatus.Running] =	new CounterTemplate("@ for", "Pause");
-		this.templates[CounterStatus.Paused] = new CounterTemplate("Start @", "Go!");
-		this.templates[CounterStatus.Over] = new CounterTemplate("# time", "#");
-		this.verbs[CounterId.Work] = "Work";
-		this.verbs[CounterId.Pause] = "Pause";
-		
 		this.currentCounter = this.workCounter;
 		this.currentCounter.updateDisplay(this);
 	}
@@ -75,16 +65,5 @@ export class Pomodoro implements Timer {
 			this.currentCounter = newCounter;
 			this.currentCounter.start(this);
 		}
-	}
-
-	public applyTemplates(status: CounterStatus, current: CounterId, next: CounterId) {
-		this.statusLabel = this.templates[status].titleLabel.replace('@', this.verbs[current]).
-				replace('#', this.verbs[next]);
-		this.stateLabel = this.templates[status].toggleButtonLabel.replace('@', this.verbs[current]).
-				replace('#', this.verbs[next]);
-	}
-
-	public getVerb(id:CounterId) {
-		return this.verbs[id];
 	}
 }

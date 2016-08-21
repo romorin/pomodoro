@@ -2,6 +2,7 @@ import { CounterState } from './counter-state';
 import { CounterContext } from './counter-context';
 import { CounterStatus } from './counter-status';
 import { Timer } from './timer';
+import { TimerLabelGenerator } from './timer-label-generator';
 
 export class CounterEditState implements CounterState{
 	private static get TOGGLE_LABEL():string { return "Next"; }
@@ -10,7 +11,7 @@ export class CounterEditState implements CounterState{
 
 	private originalLimit : number;
 
-	constructor() {}
+	constructor(private timerLabelGenerator: TimerLabelGenerator) {}
 
 	start(counter: CounterContext, timer: Timer) {}
 
@@ -26,7 +27,7 @@ export class CounterEditState implements CounterState{
 	}
 
 	updateDisplay(counter: CounterContext, timer: Timer) {
-		timer.statusLabel = timer.getVerb(counter.id);
+		timer.statusLabel = this.timerLabelGenerator.getVerb(counter.id);
 		timer.countdown = counter.limit;
 		timer.stateLabel = CounterEditState.TOGGLE_LABEL;
 		timer.editLabel = CounterEditState.EDIT_LABEL;

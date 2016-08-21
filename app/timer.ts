@@ -1,6 +1,5 @@
 import { CounterId } from './counter-id';
 import { CounterStatus } from './counter-status';
-import { CounterTemplate } from './counter-template';
 
 export interface Timer {
 	statusLabel: string;
@@ -11,7 +10,5 @@ export interface Timer {
 	editLabel: string;
 	resetLabel: string;
 
-	applyTemplates(status: CounterStatus, current: CounterId, next: CounterId): void;
-	getVerb(id:CounterId): string;
 	switchCounter() : void;
 }
