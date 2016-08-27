@@ -1,68 +1,56 @@
+import { PomodoroState } from './pomodoro-state';
 import { Timer } from './timer';
-import { Counter } from './counter';
-import { CounterId } from './counter-id';
-import { CounterStatus } from './counter-status';
-import { CounterDecoration } from './counter-decoration';
 
-export class Pomodoro implements Timer {
-	private currentCounter: Counter;
+export class Pomodoro  {
+	private _currentState: PomodoroState;
 
-	public statusLabel: string;
-	public countdown: number;
-	public leftDecoration: string;
-	public rightDecoration: string;
-	public stateLabel: string;
-	public editLabel: string;
-	public resetLabel: string;
-	public editing = false;
-
-	constructor(private workCounter: Counter, private pauseCounter: Counter) {
-		this.currentCounter = this.workCounter;
-		this.currentCounter.updateDisplay(this);
+	constructor(private _runningState: PomodoroState,
+			private _editState: PomodoroState, private _timer: Timer) {
+		this._currentState = this._runningState;
+		this._currentState.updateDisplay();
+		this._timer.editing = false;
 	}
 
 	public onEdit(){
-		this.editing = !this.editing;
-		this.pauseCounter.setEditing(this, this.editing);
-		this.workCounter.setEditing(this, this.editing);
-		this.currentCounter = this.workCounter;
-		this.currentCounter.updateDisplay(this);
+		this._timer.editing = !this._timer.editing;
+		this._currentState.onExitState();
+		this._currentState = this.getOtherState();
+		this._currentState.onEnterState();
+		this._currentState.updateDisplay();
 	}
 
 	public onToggle() {
-		this.currentCounter.toggle(this);
-		this.currentCounter.updateDisplay(this);
+		this._currentState.onToggle();
+		this._currentState.updateDisplay();
 	}
 
 	public onReset() {
-		this.pauseCounter.reset(this);
-		this.workCounter.reset(this);
-		this.currentCounter = this.workCounter;
-		this.currentCounter.updateDisplay(this);
+		this._currentState.onReset();
+		this.onEdit();
 	}
 
 	public incrementMin() {
-		this.currentCounter.incrementMin(this);
+		this._currentState.incrementMin();
+		this._currentState.updateDisplay();
 	}
 	public decrementMin() {
-		this.currentCounter.decrementMin(this);
+		this._currentState.decrementMin();
+		this._currentState.updateDisplay();
 	}
 	public incrementSec() {
-		this.currentCounter.incrementSec(this);
+		this._currentState.incrementSec();
+		this._currentState.updateDisplay();
 	}
 	public decrementSec() {
-		this.currentCounter.decrementSec(this);
+		this._currentState.decrementSec();
+		this._currentState.updateDisplay();
 	}
 
-	public switchCounter() {
-		let newCounter : Counter;
-		if (this.currentCounter === this.workCounter) {
-			newCounter = this.pauseCounter;
+	private getOtherState() {
+		if (this._currentState === this._runningState) {
+			return this._editState;
 		} else {
-			newCounter = this.workCounter;
+			return this._runningState;
 		}
-		this.currentCounter.onCounterExit(this);
-		this.currentCounter = newCounter;
-		this.currentCounter.onCounterEnter(this);
 	}
 }

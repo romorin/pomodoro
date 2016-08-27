@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Pomodoro } from './pomodoro';
+import { Timer } from './timer';
 import { PomodoroInitializer } from './pomodoro-initializer';
 
 @Component({
@@ -7,20 +8,22 @@ import { PomodoroInitializer } from './pomodoro-initializer';
     templateUrl: 'app/app.component.html',
 		styleUrls:  ['app/app.component.css']
 })
-
 export class AppComponent {
-	pomodoro: Pomodoro;
+	public pomodoro: Timer;
+	private controller: Pomodoro;
 
 	constructor() {
-		this.pomodoro = new PomodoroInitializer().init();
+		let pomodoroInit = new PomodoroInitializer();
+		this.pomodoro = pomodoroInit.display;
+		this.controller = pomodoroInit.pomodoro;
 	}
 
-	public onEdit(){ this.pomodoro.onEdit(); }
-	public onToggle() { this.pomodoro.onToggle(); }
-	public onReset() { this.pomodoro.onReset(); }
+	public onEdit(){ this.controller.onEdit(); }
+	public onToggle() { this.controller.onToggle(); }
+	public onReset() { this.controller.onReset(); }
 
-	public incrementMin() { this.pomodoro.incrementMin(); }
-	public decrementMin() { this.pomodoro.decrementMin(); }
-	public incrementSec() { this.pomodoro.incrementSec(); }
-	public decrementSec() { this.pomodoro.decrementSec(); }
+	public incrementMin() { this.controller.incrementMin(); }
+	public decrementMin() { this.controller.decrementMin(); }
+	public incrementSec() { this.controller.incrementSec(); }
+	public decrementSec() { this.controller.decrementSec(); }
 }

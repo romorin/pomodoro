@@ -1,32 +1,42 @@
-import { CounterRunState } from './counter-run-state';
-import { CounterEditState } from './counter-edit-state';
-import { CounterDecoration } from './counter-decoration';
 import { Counter } from './counter';
-import { CounterId } from './counter-id';
+import { CounterDecoration } from './counter-decoration';
 import { Pomodoro } from './pomodoro';
-import { TimerLabelGenerator } from './timer-label-generator';
+import { Timer } from './timer';
+import { RunningPomodoro } from './running-pomodoro';
+import { EditingPomodoro } from './editing-pomodoro';
+
+class Fields implements Timer {
+	public statusLabel = "";
+	public countdown = 0;
+	public leftDecoration = "";
+	public rightDecoration = "";
+	public stateLabel = "";
+	public editLabel = "";
+	public resetLabel = "";
+	public editing = false;
+}
+
 
 export class PomodoroInitializer {
-	constructor() {}
-	init() {
-		let timerLabelGenerator = new TimerLabelGenerator();
+	private _pomodoro: Pomodoro;
+	private _display: Timer;
 
-		let workRunState = new CounterRunState( timerLabelGenerator,
-			new CounterDecoration('<', '>'),
-			new CounterDecoration('<', '>'),
-			new CounterDecoration('!', '!')
-		);
-		let pauseRunState = new CounterRunState( timerLabelGenerator,
-			new CounterDecoration('>', '<'),
-			new CounterDecoration('>', '<'),
-			new CounterDecoration('$', '$')
-		);
-		let workEditState = new CounterEditState(timerLabelGenerator);
-		let pauseEditState = new CounterEditState(timerLabelGenerator);
+	constructor() {
+		let workCounter = new Counter("Working", 70,
+				new CounterDecoration('<', '>'),
+				new CounterDecoration('<', '>'),
+				new CounterDecoration('!', '!'));
+		let pauseCounter = new Counter("Walking", 30,
+				new CounterDecoration('>', '<'),
+				new CounterDecoration('>', '<'),
+				new CounterDecoration('$', '$'));
 
-		let workCounter = new Counter(70, CounterId.Work, CounterId.Pause, workRunState, workEditState);
-		let pauseCounter = new Counter(30, CounterId.Pause, CounterId.Work, pauseRunState, pauseEditState);
+		this._display = new Fields();
+		let runPomodoro = new RunningPomodoro(workCounter, pauseCounter, this._display);
+		let editPomodoro = new EditingPomodoro(workCounter, pauseCounter, this._display);
 
-		return new Pomodoro(workCounter, pauseCounter);
+		this._pomodoro = new Pomodoro(runPomodoro, editPomodoro, this._display);
 	}
+	get pomodoro() { return this._pomodoro; }
+	get display() { return this._display; }
 }

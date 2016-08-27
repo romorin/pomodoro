@@ -1,62 +1,108 @@
-import { Timer } from './timer';
-import { CounterContext } from './counter-context';
-import { CounterDecoration } from './counter-decoration';
-import { CounterState } from './counter-state';
-import { CounterRunState } from './counter-run-state';
-import { CounterEditState } from './counter-edit-state';
-import { CounterId } from './counter-id';
 import { CounterStatus } from './counter-status';
+import { CounterDecoration } from './counter-decoration';
 
-export class Counter implements CounterContext {
-	private currentState : CounterState;
+export class Counter {
+	private _status = CounterStatus.Paused;
+	private _remaining: number;
+	private _interval: any;
+	private _decorations: {[status: number]: CounterDecoration} = {};
 
-	constructor(
-		public limit: number,
-		public id: CounterId,
-		public nextId: CounterId,
-		private runState : CounterState,
-		private editState : CounterState
-	) {
-		this.currentState = this.runState;
+	private _titleBackup: string;
+	private _lengthBackup: number;
+
+	constructor(private _title: string, private _length: number,
+			runningDecorations: CounterDecoration,
+			pausedDecorations: CounterDecoration,
+			overDecorations: CounterDecoration) {
+		this._remaining = this._length;
+		this._interval = null;
+
+		this._decorations[CounterStatus.Running] = runningDecorations;
+		this._decorations[CounterStatus.Paused] = pausedDecorations;
+		this._decorations[CounterStatus.Over] = overDecorations;
 	}
 
-	public setEditing( timer: Timer, editing: boolean) {
-		if (editing && this.currentState === this.runState) {
-			this.currentState.onStateExit(this, timer);
-			this.currentState = this.editState;
-			this.currentState.onStateEnter(this, timer);
-		} else if (!editing && this.currentState === this.editState){
-			this.currentState.onStateExit(this, timer);
-			this.currentState = this.runState;
-			this.currentState.onStateEnter(this, timer);
+	public toggle(onTick: (counter: Counter) => void) {
+		if (this._status === CounterStatus.Paused) {
+			this.startCounting(onTick);
+		} else if (this._status ===  CounterStatus.Running) {
+			this.stopCounting();
 		}
 	}
 
-	public reset(timer: Timer) {
-		this.currentState.reset(this, timer);
+	public reset() {
+		if (this._interval) {
+			this.stopInterval();
+		}
+		this._status = CounterStatus.Paused;
+		this._remaining = this._length;
 	}
-	public updateDisplay(timer: Timer) {
-		this.currentState.updateDisplay(this, timer);
+
+	public get length() {
+		return this._length;
 	}
-	public toggle(timer: Timer) {
-		this.currentState.toggle(this, timer);
+
+	public set length(newLength: number) {
+		this.setLength(newLength);
 	}
-	public incrementMin(timer: Timer) {
-		this.currentState.incrementMin(this, timer);
+
+	protected setLength(newLength: number) {
+		this._length = newLength > 1 ? newLength : 1;
+		this._remaining = this._length;
 	}
-	public decrementMin(timer: Timer) {
-		this.currentState.decrementMin(this, timer);
+
+	public backup() {
+		this._titleBackup = this._title;
+		this._lengthBackup = this._length;
 	}
-	public incrementSec(timer: Timer) {
-		this.currentState.incrementSec(this, timer);
+
+	public restore() {
+		this._title = this._titleBackup;
+		this.setLength(this._lengthBackup);
 	}
-	public decrementSec(timer: Timer) {
-		this.currentState.decrementSec(this, timer);
+
+	public get remaining() {
+		return this._remaining;
 	}
-	public onCounterEnter(timer: Timer) {
-		this.currentState.onCounterEnter(this, timer);
+
+	public get title() {
+		return this._title;
 	}
-	public onCounterExit(timer: Timer) {
-		this.currentState.onCounterExit(this, timer);
+
+	public set title(newTitle: string) {
+		this._title = newTitle;
+	}
+
+	public getDecorations() : CounterDecoration {
+		return this._decorations[this._status];
+	}
+
+	public get status() {
+		return this._status;
+	}
+
+	private startCounting(onTick: (counter: Counter) => void) {
+		if (this._remaining === null) {
+			this._remaining = this._length;
+		}
+		this._status = CounterStatus.Running;
+		this._interval = setInterval(() => {
+			this._remaining -= 1;
+			if(this._remaining < 1) {
+				this.stopInterval();
+				this._status = CounterStatus.Over;
+			}
+			onTick(this);
+		}, 1000);
+	}
+
+	private stopCounting() {
+		this._status = CounterStatus.Paused;
+		this.stopInterval();
+	}
+
+	private stopInterval() {
+		clearInterval(this._interval);
+		this._interval = null;
 	}
 }
