@@ -4,6 +4,7 @@ import { Pomodoro } from './pomodoro';
 import { Timer } from './timer';
 import { RunningPomodoro } from './running-pomodoro';
 import { EditingPomodoro } from './editing-pomodoro';
+import { Constants } from './constants';
 
 class Fields implements Timer {
 	public statusLabel = "";
@@ -22,18 +23,14 @@ export class PomodoroInitializer {
 	private _display: Timer;
 
 	constructor() {
-		let workCounter = new Counter("Working", 70,
-				new CounterDecoration('<', '>'),
-				new CounterDecoration('<', '>'),
-				new CounterDecoration('!', '!'));
-		let pauseCounter = new Counter("Walking", 30,
-				new CounterDecoration('>', '<'),
-				new CounterDecoration('>', '<'),
-				new CounterDecoration('$', '$'));
+		let constants = new Constants();
+
+		let workCounter = new Counter(constants.workCounter);
+		let pauseCounter = new Counter(constants.pauseCounter);
 
 		this._display = new Fields();
-		let runPomodoro = new RunningPomodoro(workCounter, pauseCounter, this._display);
-		let editPomodoro = new EditingPomodoro(workCounter, pauseCounter, this._display);
+		let runPomodoro = new RunningPomodoro(workCounter, pauseCounter, this._display, constants);
+		let editPomodoro = new EditingPomodoro(workCounter, pauseCounter, this._display, constants);
 
 		this._pomodoro = new Pomodoro(runPomodoro, editPomodoro, this._display);
 	}

@@ -1,8 +1,11 @@
 import { CounterStatus } from './counter-status';
 import { CounterDecoration } from './counter-decoration';
+import { CounterConstants } from './counter-constants';
 
 export class Counter {
 	private _status = CounterStatus.Paused;
+	private _title: string;
+	private _length: number;
 	private _remaining: number;
 	private _interval: any;
 	private _decorations: {[status: number]: CounterDecoration} = {};
@@ -10,16 +13,18 @@ export class Counter {
 	private _titleBackup: string;
 	private _lengthBackup: number;
 
-	constructor(private _title: string, private _length: number,
-			runningDecorations: CounterDecoration,
-			pausedDecorations: CounterDecoration,
-			overDecorations: CounterDecoration) {
+	constructor(private _constants: CounterConstants) {
+		this._title = this._constants.action;
+		this._length = this._constants.length;
 		this._remaining = this._length;
 		this._interval = null;
 
-		this._decorations[CounterStatus.Running] = runningDecorations;
-		this._decorations[CounterStatus.Paused] = pausedDecorations;
-		this._decorations[CounterStatus.Over] = overDecorations;
+		this._decorations[CounterStatus.Running] = new CounterDecoration(
+			this._constants.runningLeftDecoration, this._constants.runningRightDecoration);
+		this._decorations[CounterStatus.Paused] = new CounterDecoration(
+			this._constants.pausedLeftDecoration, this._constants.pausedRightDecoration);
+		this._decorations[CounterStatus.Over] = new CounterDecoration(
+			this._constants.overLeftDecoration, this._constants.overRightDecoration);
 	}
 
 	public toggle(onTick: (counter: Counter) => void) {

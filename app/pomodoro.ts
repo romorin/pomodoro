@@ -26,7 +26,9 @@ export class Pomodoro  {
 
 	public onReset() {
 		this._currentState.onReset();
-		this.onEdit();
+		if (this._currentState === this._editState) {
+			this.onEdit();
+		}
 	}
 
 	public incrementMin() {
