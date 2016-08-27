@@ -1,6 +1,6 @@
 import { PomodoroState } from './pomodoro-state'
 import { Counter } from './counter';
-import { Timer } from './timer';
+import { PomodoroDisplay } from './pomodoro-display';
 import { Constants } from './constants';
 
 export class EditingPomodoro implements PomodoroState {
@@ -8,7 +8,7 @@ export class EditingPomodoro implements PomodoroState {
 	private _titleLabelSet = false;
 
 	constructor(private _workCounter: Counter, private _pauseCounter: Counter,
-			private _timer: Timer, private _constants: Constants) {
+			private _display: PomodoroDisplay, private _constants: Constants) {
 		this._currentCounter = this._workCounter;
 	}
 
@@ -20,13 +20,13 @@ export class EditingPomodoro implements PomodoroState {
 
 	public onExitState() {
 		if (this._titleLabelSet) {
-			this._currentCounter.title = this._timer.statusLabel;
+			this._currentCounter.title = this._display.statusLabel;
 		}
 	}
 
 	public onToggle() {
 		if (this._titleLabelSet) {
-			this._currentCounter.title = this._timer.statusLabel;
+			this._currentCounter.title = this._display.statusLabel;
 		}
 		this.setCounter(this.getOtherCounter());
 	}
@@ -52,13 +52,13 @@ export class EditingPomodoro implements PomodoroState {
 	}
 	public updateDisplay() {
 		if(!this._titleLabelSet) {
-			this._timer.statusLabel = this._currentCounter.title;
+			this._display.statusLabel = this._currentCounter.title;
 			this._titleLabelSet = true;
 		}
-		this._timer.countdown = this._currentCounter.length;
-		this._timer.stateLabel = this._constants.editToggleLabel;
-		this._timer.editLabel = this._constants.editEditLabel;
-		this._timer.resetLabel = this._constants.editResetLabel;
+		this._display.countdown = this._currentCounter.length;
+		this._display.stateLabel = this._constants.editToggleLabel;
+		this._display.editLabel = this._constants.editEditLabel;
+		this._display.resetLabel = this._constants.editResetLabel;
 	}
 
 	private getOtherCounter() {

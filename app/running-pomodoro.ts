@@ -1,6 +1,6 @@
 import { Counter } from './counter';
 import { CounterStatus } from './counter-status';
-import { Timer } from './timer';
+import { PomodoroDisplay } from './pomodoro-display';
 import { PomodoroState } from './pomodoro-state';
 import { Constants } from './constants';
 
@@ -16,7 +16,7 @@ export class RunningPomodoro implements PomodoroState {
 	private _templates: {[status: number]: CounterTemplate} = {};
 
 	constructor(private _workCounter: Counter, private _pauseCounter: Counter,
-			private _timer: Timer, private _constants: Constants) {
+			private _display: PomodoroDisplay, private _constants: Constants) {
 		this._currentCounter = this._workCounter;
 
 		this._templates[CounterStatus.Running] = new CounterTemplate(
@@ -52,20 +52,20 @@ export class RunningPomodoro implements PomodoroState {
 
 	public updateDisplay() {
 		let currentTemplate = this._templates[this._currentCounter.status];
-		this._timer.statusLabel = currentTemplate.titleLabel
+		this._display.statusLabel = currentTemplate.titleLabel
 			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
 			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
-		this._timer.stateLabel = currentTemplate.toggleButtonLabel
+		this._display.stateLabel = currentTemplate.toggleButtonLabel
 			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
 			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
 
 		let decorations = this._currentCounter.getDecorations();
-		this._timer.leftDecoration = decorations.left;
-		this._timer.rightDecoration = decorations.right;
+		this._display.leftDecoration = decorations.left;
+		this._display.rightDecoration = decorations.right;
 
-		this._timer.countdown = this._currentCounter.remaining;
-		this._timer.editLabel = this._constants.runningEditLabel;
-		this._timer.resetLabel = this._constants.runningResetLabel;
+		this._display.countdown = this._currentCounter.remaining;
+		this._display.editLabel = this._constants.runningEditLabel;
+		this._display.resetLabel = this._constants.runningResetLabel;
 	}
 
 	private getOtherCounter() {

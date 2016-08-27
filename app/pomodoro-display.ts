@@ -1,4 +1,4 @@
-export interface Timer {
+export interface PomodoroDisplay {
 	statusLabel: string;
 	countdown: number;
 	leftDecoration: string;

@@ -1,18 +1,18 @@
 import { PomodoroState } from './pomodoro-state';
-import { Timer } from './timer';
+import { PomodoroDisplay } from './pomodoro-display';
 
 export class Pomodoro  {
 	private _currentState: PomodoroState;
 
 	constructor(private _runningState: PomodoroState,
-			private _editState: PomodoroState, private _timer: Timer) {
+			private _editState: PomodoroState, private _display: PomodoroDisplay) {
 		this._currentState = this._runningState;
 		this._currentState.updateDisplay();
-		this._timer.editing = false;
+		this._display.editing = false;
 	}
 
 	public onEdit(){
-		this._timer.editing = !this._timer.editing;
+		this._display.editing = !this._display.editing;
 		this._currentState.onExitState();
 		this._currentState = this.getOtherState();
 		this._currentState.onEnterState();
@@ -28,6 +28,8 @@ export class Pomodoro  {
 		this._currentState.onReset();
 		if (this._currentState === this._editState) {
 			this.onEdit();
+		} else {
+			this._currentState.updateDisplay();
 		}
 	}
 

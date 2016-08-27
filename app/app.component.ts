@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Pomodoro } from './pomodoro';
-import { Timer } from './timer';
+import { PomodoroDisplay } from './pomodoro-display';
 import { PomodoroInitializer } from './pomodoro-initializer';
 
 @Component({
@@ -9,7 +9,7 @@ import { PomodoroInitializer } from './pomodoro-initializer';
 		styleUrls:  ['app/app.component.css']
 })
 export class AppComponent implements OnInit  {
-	public pomodoro: Timer;
+	public pomodoro: PomodoroDisplay;
 	private controller: Pomodoro;
 
 	constructor() {}

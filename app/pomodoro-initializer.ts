@@ -1,12 +1,12 @@
 import { Counter } from './counter';
 import { CounterDecoration } from './counter-decoration';
 import { Pomodoro } from './pomodoro';
-import { Timer } from './timer';
+import { PomodoroDisplay } from './pomodoro-display';
 import { RunningPomodoro } from './running-pomodoro';
 import { EditingPomodoro } from './editing-pomodoro';
 import { Constants } from './constants';
 
-class Fields implements Timer {
+class Fields implements PomodoroDisplay {
 	public statusLabel = "";
 	public countdown = 0;
 	public leftDecoration = "";
@@ -20,7 +20,7 @@ class Fields implements Timer {
 
 export class PomodoroInitializer {
 	private _pomodoro: Pomodoro;
-	private _display: Timer;
+	private _display: PomodoroDisplay;
 
 	constructor() {
 		let constants = new Constants();
