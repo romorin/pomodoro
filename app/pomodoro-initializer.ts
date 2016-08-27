@@ -7,7 +7,7 @@ import { EditingPomodoro } from './editing-pomodoro';
 import { Constants } from './constants';
 
 class Fields implements PomodoroDisplay {
-	public statusLabel = "";
+	public titleLabel = "";
 	public countdown = 0;
 	public leftDecoration = "";
 	public rightDecoration = "";

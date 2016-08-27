@@ -20,13 +20,13 @@ export class EditingPomodoro implements PomodoroState {
 
 	public onExitState() {
 		if (this._titleLabelSet) {
-			this._currentCounter.title = this._display.statusLabel;
+			this._currentCounter.title = this._display.titleLabel;
 		}
 	}
 
 	public onToggle() {
 		if (this._titleLabelSet) {
-			this._currentCounter.title = this._display.statusLabel;
+			this._currentCounter.title = this._display.titleLabel;
 		}
 		this.setCounter(this.getOtherCounter());
 	}
@@ -52,7 +52,7 @@ export class EditingPomodoro implements PomodoroState {
 	}
 	public updateDisplay() {
 		if(!this._titleLabelSet) {
-			this._display.statusLabel = this._currentCounter.title;
+			this._display.titleLabel = this._currentCounter.title;
 			this._titleLabelSet = true;
 		}
 		this._display.countdown = this._currentCounter.length;
