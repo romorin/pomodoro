@@ -1,5 +1,4 @@
 import { Counter } from './counter';
-import { CounterDecoration } from './counter-decoration';
 import { Pomodoro } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
 import { RunningPomodoro } from './running-pomodoro';

@@ -1,6 +1,12 @@
 import { CounterStatus } from './counter-status';
-import { CounterDecoration } from './counter-decoration';
 import { CounterConstants } from './counter-constants';
+
+class CounterDecoration {
+	constructor(
+		public left: string,
+		public right: string
+	) {}
+}
 
 export class Counter {
 	private _status = CounterStatus.Paused;
