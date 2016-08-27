@@ -1,9 +1,9 @@
 export interface PomodoroDisplay {
-	statusLabel: string;
+	titleLabel: string;
 	countdown: number;
 	leftDecoration: string;
 	rightDecoration: string;
-	stateLabel: string;
+	toggleLabel: string;
 	editLabel: string;
 	resetLabel: string;
 	editing: boolean;

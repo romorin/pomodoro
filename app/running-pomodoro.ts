@@ -55,7 +55,7 @@ export class RunningPomodoro implements PomodoroState {
 		this._display.titleLabel = currentTemplate.titleLabel
 			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
 			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
-		this._display.stateLabel = currentTemplate.toggleButtonLabel
+		this._display.toggleLabel = currentTemplate.toggleButtonLabel
 			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
 			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
 

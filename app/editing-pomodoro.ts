@@ -56,7 +56,7 @@ export class EditingPomodoro implements PomodoroState {
 			this._titleLabelSet = true;
 		}
 		this._display.countdown = this._currentCounter.length;
-		this._display.stateLabel = this._constants.editToggleLabel;
+		this._display.toggleLabel = this._constants.editToggleLabel;
 		this._display.editLabel = this._constants.editEditLabel;
 		this._display.resetLabel = this._constants.editResetLabel;
 	}

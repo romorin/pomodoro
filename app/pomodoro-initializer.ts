@@ -11,7 +11,7 @@ class Fields implements PomodoroDisplay {
 	public countdown = 0;
 	public leftDecoration = "";
 	public rightDecoration = "";
-	public stateLabel = "";
+	public toggleLabel = "";
 	public editLabel = "";
 	public resetLabel = "";
 	public editing = false;

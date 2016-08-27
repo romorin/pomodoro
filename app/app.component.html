@@ -18,7 +18,7 @@
 		<div *ngIf="! pomodoro.editing">{{pomodoro.rightDecoration}}</div>
 	</div>
 	<div class="action-buttons">
-		<button class="timer-button" (click)="onToggle()">[{{pomodoro.stateLabel}}]</button>
+		<button class="timer-button" (click)="onToggle()">[{{pomodoro.toggleLabel}}]</button>
 		<button class="timer-button" (click)="onReset()">[{{pomodoro.resetLabel}}]</button>
 		<button class="timer-button" (click)="onEdit()">[{{pomodoro.editLabel}}]</button>
 	</div>
