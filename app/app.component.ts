@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Pomodoro } from './pomodoro';
-import { PomodoroDisplay } from './pomodoro-display';
-import { PomodoroService } from './pomodoro.service';
+import { Pomodoro } from './pomodoro/pomodoro';
+import { PomodoroDisplay } from './pomodoro/pomodoro-display';
+import { PomodoroService } from './pomodoro/pomodoro.service';
 
-import { MODULE_POMODORO } from './pomodoro.module';
+import { MODULE_POMODORO } from './pomodoro/pomodoro.module';
 
 @Component({
     selector: 'my-app',
