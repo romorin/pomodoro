@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { Counter } from './counter';
 import { CounterStatus } from './counter-status';
 import { PomodoroDisplay } from './pomodoro-display';
@@ -9,6 +11,14 @@ class CounterTemplate {
 		public titleLabel: string,
 		public toggleButtonLabel: string
 	) {}
+}
+
+@Injectable()
+export class RunningPomodoroFactory {
+	public init(_workCounter: Counter, _pauseCounter: Counter,
+			_display: PomodoroDisplay, _constants: Constants) {
+		return new RunningPomodoro(_workCounter, _pauseCounter, _display, _constants);
+	}
 }
 
 export class RunningPomodoro implements PomodoroState {

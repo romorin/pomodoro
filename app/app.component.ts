@@ -3,11 +3,13 @@ import { Pomodoro } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
 import { PomodoroService } from './pomodoro.service';
 
+import { MODULE_POMODORO } from './pomodoro.module';
+
 @Component({
     selector: 'my-app',
     templateUrl: 'app/app.component.html',
 		styleUrls:  ['app/app.component.css'],
-		providers: [ PomodoroService ]
+		providers: [ PomodoroService, MODULE_POMODORO ]
 })
 export class AppComponent implements OnInit  {
 	public pomodoro: PomodoroDisplay;

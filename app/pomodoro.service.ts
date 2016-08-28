@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
-import { Counter } from './counter';
-import { Pomodoro } from './pomodoro';
+import { CounterFactory } from './counter';
+import { Pomodoro, PomodoroFactory } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
-import { RunningPomodoro } from './running-pomodoro';
-import { EditingPomodoro } from './editing-pomodoro';
+import { RunningPomodoroFactory } from './running-pomodoro';
+import { EditingPomodoroFactory } from './editing-pomodoro';
 import { Constants } from './constants';
 
 class Fields implements PomodoroDisplay {
@@ -23,17 +23,21 @@ export class PomodoroService {
 	private _pomodoro: Pomodoro;
 	private _display: PomodoroDisplay;
 
-	constructor() {
+	constructor(
+			private counterFactory: CounterFactory,
+			private runningPomodoroFactory: RunningPomodoroFactory,
+			private editPomodoroFactory: EditingPomodoroFactory,
+			private pomodoroFactory: PomodoroFactory) {
 		let constants = new Constants();
 
-		let workCounter = new Counter(constants.workCounter);
-		let pauseCounter = new Counter(constants.pauseCounter);
+		let workCounter = counterFactory.init(constants.workCounter);
+		let pauseCounter = counterFactory.init(constants.pauseCounter);
 
 		this._display = new Fields();
-		let runPomodoro = new RunningPomodoro(workCounter, pauseCounter, this._display, constants);
-		let editPomodoro = new EditingPomodoro(workCounter, pauseCounter, this._display, constants);
+		let runPomodoro = runningPomodoroFactory.init(workCounter, pauseCounter, this._display, constants);
+		let editPomodoro = editPomodoroFactory.init(workCounter, pauseCounter, this._display, constants);
 
-		this._pomodoro = new Pomodoro(runPomodoro, editPomodoro, this._display);
+		this._pomodoro = pomodoroFactory.init(runPomodoro, editPomodoro, this._display);
 	}
 	get pomodoro() { return this._pomodoro; }
 	get display() { return this._display; }

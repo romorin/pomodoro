@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { CounterStatus } from './counter-status';
 import { CounterConstants } from './counter-constants';
 
@@ -6,6 +8,13 @@ class CounterDecoration {
 		public left: string,
 		public right: string
 	) {}
+}
+
+@Injectable()
+export class CounterFactory {
+	public init(_constants: CounterConstants) {
+		return new Counter(_constants);
+	}
 }
 
 export class Counter {
