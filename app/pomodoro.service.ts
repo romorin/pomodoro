@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 import { Counter } from './counter';
 import { Pomodoro } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
@@ -16,8 +18,8 @@ class Fields implements PomodoroDisplay {
 	public editing = false;
 }
 
-
-export class PomodoroInitializer {
+@Injectable()
+export class PomodoroService {
 	private _pomodoro: Pomodoro;
 	private _display: PomodoroDisplay;
 

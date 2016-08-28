@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Pomodoro } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
-import { PomodoroInitializer } from './pomodoro-initializer';
+import { PomodoroService } from './pomodoro.service';
 
 @Component({
     selector: 'my-app',
     templateUrl: 'app/app.component.html',
-		styleUrls:  ['app/app.component.css']
+		styleUrls:  ['app/app.component.css'],
+		providers: [ PomodoroService ]
 })
 export class AppComponent implements OnInit  {
 	public pomodoro: PomodoroDisplay;
 	private controller: Pomodoro;
 
-	constructor() {}
+	constructor(private pomodoroService: PomodoroService) {}
 
 	ngOnInit(): void {
-		let pomodoroInit = new PomodoroInitializer();
-		this.pomodoro = pomodoroInit.display;
-		this.controller = pomodoroInit.pomodoro;
+		this.pomodoro = this.pomodoroService.display;
+		this.controller = this.pomodoroService.pomodoro;
   }
 
 	public onEdit(){ this.controller.onEdit(); }
