@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { CounterFactory } from './counter';
-import { Pomodoro, PomodoroFactory } from './pomodoro';
-import { PomodoroDisplay } from './pomodoro-display';
-import { RunningPomodoroFactory } from './running-pomodoro';
-import { EditingPomodoroFactory } from './editing-pomodoro';
+import { CounterFactory } from './counter.factory';
+import { PomodoroFactory } from './pomodoro.factory';
+import { RunningPomodoroFactory } from './running-pomodoro.factory';
+import { EditingPomodoroFactory } from './editing-pomodoro.factory';
 import { Constants, WorkCounterConstants, PauseCounterConstants } from './constants';
+
+import { Pomodoro } from './pomodoro';
+import { PomodoroDisplay } from './pomodoro-display';
 
 @Injectable()
 export class PomodoroService {

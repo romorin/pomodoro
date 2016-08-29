@@ -1,7 +1,7 @@
-import { CounterFactory } from './counter';
-import { RunningPomodoroFactory } from './running-pomodoro';
-import { EditingPomodoroFactory } from './editing-pomodoro';
-import { PomodoroFactory } from './pomodoro';
+import { CounterFactory } from './counter.factory';
+import { RunningPomodoroFactory } from './running-pomodoro.factory';
+import { EditingPomodoroFactory } from './editing-pomodoro.factory';
+import { PomodoroFactory } from './pomodoro.factory';
 import { Constants, WorkCounterConstants, PauseCounterConstants } from './constants';
 
 export const MODULE_POMODORO: any[] = [
