@@ -1,7 +1,7 @@
 {
-  "name": "angular2-quickstart",
+  "name": "podomoro",
   "version": "1.0.0",
-  "description": "QuickStart package.json from the documentation, supplemented with testing support",
+  "description": "Minimalist customizable pomodoro.",
   "scripts": {
     "start": "tsc && concurrently \"tsc -w\" \"lite-server\" ",
     "lint": "tslint ./app/**/*.ts -t verbose",
