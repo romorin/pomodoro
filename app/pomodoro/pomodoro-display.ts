@@ -1,10 +1,10 @@
-export interface PomodoroDisplay {
-	titleLabel: string;
-	countdown: number;
-	leftDecoration: string;
-	rightDecoration: string;
-	toggleLabel: string;
-	editLabel: string;
-	resetLabel: string;
-	editing: boolean;
+export class PomodoroDisplay {
+	public titleLabel = "";
+	public countdown = 0;
+	public leftDecoration = "";
+	public rightDecoration = "";
+	public toggleLabel = "";
+	public editLabel = "";
+	public resetLabel = "";
+	public editing = false;
 }

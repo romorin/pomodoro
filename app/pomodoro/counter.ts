@@ -28,18 +28,18 @@ export class Counter {
 	private _titleBackup: string;
 	private _lengthBackup: number;
 
-	constructor(private _constants: CounterConstants) {
-		this._title = this._constants.action;
-		this._length = this._constants.length;
+	constructor(_constants: CounterConstants) {
+		this._title = _constants.ACTION;
+		this._length = _constants.LENGTH;
 		this._remaining = this._length;
 		this._interval = null;
 
 		this._decorations[CounterStatus.Running] = new CounterDecoration(
-			this._constants.runningLeftDecoration, this._constants.runningRightDecoration);
+			_constants.RUNNING_LEFT_DECORATION, _constants.RUNNING_RIGHT_DECORATION);
 		this._decorations[CounterStatus.Paused] = new CounterDecoration(
-			this._constants.pausedLeftDecoration, this._constants.pausedRightDecoration);
+			_constants.PAUSED_LEFT_DECORATION, _constants.PAUSED_RIGHT_DECORATION);
 		this._decorations[CounterStatus.Over] = new CounterDecoration(
-			this._constants.overLeftDecoration, this._constants.overRightDecoration);
+			_constants.OVER_LEFT_DECORATION, _constants.OVER_RIGHT_DECORATION);
 	}
 
 	public toggle(onTick: (counter: Counter) => void) {

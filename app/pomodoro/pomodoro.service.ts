@@ -5,18 +5,7 @@ import { Pomodoro, PomodoroFactory } from './pomodoro';
 import { PomodoroDisplay } from './pomodoro-display';
 import { RunningPomodoroFactory } from './running-pomodoro';
 import { EditingPomodoroFactory } from './editing-pomodoro';
-import { Constants } from './constants';
-
-class Fields implements PomodoroDisplay {
-	public titleLabel = "";
-	public countdown = 0;
-	public leftDecoration = "";
-	public rightDecoration = "";
-	public toggleLabel = "";
-	public editLabel = "";
-	public resetLabel = "";
-	public editing = false;
-}
+import { Constants, WorkCounterConstants, PauseCounterConstants } from './constants';
 
 @Injectable()
 export class PomodoroService {
@@ -27,13 +16,16 @@ export class PomodoroService {
 			private counterFactory: CounterFactory,
 			private runningPomodoroFactory: RunningPomodoroFactory,
 			private editPomodoroFactory: EditingPomodoroFactory,
-			private pomodoroFactory: PomodoroFactory) {
-		let constants = new Constants();
+			private pomodoroFactory: PomodoroFactory,
+			private constants: Constants,
+			private workCounterConstants: WorkCounterConstants,
+			private pauseCounterConstants: PauseCounterConstants
+		) {
 
-		let workCounter = counterFactory.init(constants.workCounter);
-		let pauseCounter = counterFactory.init(constants.pauseCounter);
+		let workCounter = counterFactory.init(workCounterConstants);
+		let pauseCounter = counterFactory.init(pauseCounterConstants);
 
-		this._display = new Fields();
+		this._display = new PomodoroDisplay();
 		let runPomodoro = runningPomodoroFactory.init(workCounter, pauseCounter, this._display, constants);
 		let editPomodoro = editPomodoroFactory.init(workCounter, pauseCounter, this._display, constants);
 

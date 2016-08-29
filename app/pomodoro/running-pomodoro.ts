@@ -30,11 +30,11 @@ export class RunningPomodoro implements PomodoroState {
 		this._currentCounter = this._workCounter;
 
 		this._templates[CounterStatus.Running] = new CounterTemplate(
-					this._constants.runningTitleTemplate, this._constants.runningToggleLabelTemplate);
+					this._constants.RUNNING_TITLE_TEMPLATE, this._constants.RUNNING_TOGGLE_LABEL_TEMPLATE);
 		this._templates[CounterStatus.Paused] = new CounterTemplate(
-			this._constants.pausedTitleTemplate, this._constants.pausedToggleLabelTemplate);
+			this._constants.PAUSED_TITLE_TEMPLATE, this._constants.PAUSED_TOGGLE_LABEL_TEMPLATE);
 		this._templates[CounterStatus.Over] = new CounterTemplate(
-			this._constants.overTitleTemplate, this._constants.overToggleLabelTemplate);
+			this._constants.OVER_TITLE_TEMPLATE, this._constants.OVER_TOGGLE_LABEL_TEMPLATE);
 	}
 
 	public onEnterState() {}
@@ -63,19 +63,19 @@ export class RunningPomodoro implements PomodoroState {
 	public updateDisplay() {
 		let currentTemplate = this._templates[this._currentCounter.status];
 		this._display.titleLabel = currentTemplate.titleLabel
-			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
-			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
+			.replace(this._constants.CURRENT_TEMPLATE_TOKEN, this._currentCounter.title)
+			.replace(this._constants.NEXT_TEMPLATE_TOKEN, this.getOtherCounter().title);
 		this._display.toggleLabel = currentTemplate.toggleButtonLabel
-			.replace(this._constants.currentTemplateToken, this._currentCounter.title)
-			.replace(this._constants.nextTemplateToken, this.getOtherCounter().title);
+			.replace(this._constants.CURRENT_TEMPLATE_TOKEN, this._currentCounter.title)
+			.replace(this._constants.NEXT_TEMPLATE_TOKEN, this.getOtherCounter().title);
 
 		let decorations = this._currentCounter.getDecorations();
 		this._display.leftDecoration = decorations.left;
 		this._display.rightDecoration = decorations.right;
 
 		this._display.countdown = this._currentCounter.remaining;
-		this._display.editLabel = this._constants.runningEditLabel;
-		this._display.resetLabel = this._constants.runningResetLabel;
+		this._display.editLabel = this._constants.RUNNING_EDIT_LABEL;
+		this._display.resetLabel = this._constants.RUNNING_RESET_LABEL;
 	}
 
 	private getOtherCounter() {
