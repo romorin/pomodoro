@@ -31,11 +31,11 @@ export class RunningPomodoro implements PomodoroState {
 	public onExitState() { this.onReset(); }
 
 	public onToggle() {
-		if(this._currentCounter.status === CounterStatus.Over) {
+		if (this._currentCounter.status === CounterStatus.Over) {
 			this._currentCounter.reset();
 			this._currentCounter = this.getOtherCounter();
 		}
-		this._currentCounter.toggle((counter: Counter) => {this.updateDisplay();});
+		this._currentCounter.toggle((counter: Counter) => { this.updateDisplay(); });
 	}
 
 	public onReset() {

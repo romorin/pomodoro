@@ -1,4 +1,4 @@
-import { PomodoroState } from './pomodoro-state'
+import { PomodoroState } from './pomodoro-state';
 import { Counter } from './counter';
 import { PomodoroDisplay } from './pomodoro-display';
 import { Constants } from './constants';
@@ -51,7 +51,7 @@ export class EditingPomodoro implements PomodoroState {
 		this._currentCounter.length -= 1;
 	}
 	public updateDisplay() {
-		if(!this._titleLabelSet) {
+		if (!this._titleLabelSet) {
 			this._display.titleLabel = this._currentCounter.title;
 			this._titleLabelSet = true;
 		}

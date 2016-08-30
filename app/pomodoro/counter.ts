@@ -84,7 +84,7 @@ export class Counter {
 		this._title = newTitle;
 	}
 
-	public getDecorations() : CounterDecoration {
+	public getDecorations(): CounterDecoration {
 		return this._decorations[this._status];
 	}
 
@@ -99,7 +99,7 @@ export class Counter {
 		this._status = CounterStatus.Running;
 		this._interval = setInterval(() => {
 			this._remaining -= 1;
-			if(this._remaining < 1) {
+			if (this._remaining < 1) {
 				this.stopInterval();
 				this._status = CounterStatus.Over;
 			}

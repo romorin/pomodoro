@@ -11,7 +11,7 @@ export class Pomodoro  {
 		this._display.editing = false;
 	}
 
-	public onEdit(){
+	public onEdit() {
 		this._display.editing = !this._display.editing;
 		this._currentState.onExitState();
 		this._currentState = this.getOtherState();
