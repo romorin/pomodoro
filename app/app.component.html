@@ -1,7 +1,7 @@
 <div class="timer">
-	<input *ngIf="pomodoro.editing" type="text" class="form-control" id="titleLabel"
+	<input *ngIf="pomodoro.editing" type="text" class="form-control title" id="titleLabel"
   		required [(ngModel)]="pomodoro.titleLabel" name="titleLabel">
-	<h1 *ngIf="! pomodoro.editing">{{pomodoro.titleLabel}}</h1>
+	<h1 *ngIf="! pomodoro.editing" class="title">{{pomodoro.titleLabel}}</h1>
 	<div class="counter">
 		<div *ngIf="pomodoro.editing">
 			<button class="timer-button" (click)="incrementMin()">&and;</button>
