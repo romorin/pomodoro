@@ -1,14 +1,14 @@
-import { Pomodoro2Page } from './app.po';
+import { PomodoroPage } from './app.po';
 
-describe('pomodoro2 App', function() {
-  let page: Pomodoro2Page;
+describe('pomodoro App', function() {
+  let page: PomodoroPage;
 
   beforeEach(() => {
-    page = new Pomodoro2Page();
+    page = new PomodoroPage();
   });
 
-  it('should display message saying app works', () => {
+  it('should display Edit onn edit button', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('app works!');
+    expect(page.getEditButtonText()).toEqual('[Edit]');
   });
 });

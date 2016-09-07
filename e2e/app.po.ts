@@ -1,9 +1,9 @@
-export class Pomodoro2Page {
+export class PomodoroPage {
   navigateTo() {
     return browser.get('/');
   }
 
-  getParagraphText() {
-    return element(by.css('app-root h1')).getText();
+  getEditButtonText() {
+    return element(by.css('.action-buttons > button:last-child')).getText();
   }
 }
