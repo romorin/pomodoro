@@ -1,3 +1,4 @@
+<div class="app-component">
 <div class="timer">
 	<input *ngIf="pomodoro.editing" type="text" class="form-control title" id="titleLabel"
   		required [(ngModel)]="pomodoro.titleLabel" name="titleLabel">
@@ -22,4 +23,5 @@
 		<button class="timer-button" (click)="onReset()">[{{pomodoro.resetLabel}}]</button>
 		<button class="timer-button" (click)="onEdit()">[{{pomodoro.editLabel}}]</button>
 	</div>
+</div>
 </div>

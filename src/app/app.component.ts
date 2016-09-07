@@ -1,3 +1,15 @@
+/*import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.css']
+})
+export class AppComponent {
+  title = 'app works!';
+}
+*/
+
 import { Component, OnInit } from '@angular/core';
 import { Pomodoro } from './pomodoro/pomodoro';
 import { PomodoroDisplay } from './pomodoro/pomodoro-display';
@@ -6,9 +18,9 @@ import { PomodoroService } from './pomodoro/pomodoro.service';
 import { MODULE_POMODORO } from './pomodoro/pomodoro.module';
 
 @Component({
-    selector: 'my-app',
-    templateUrl: 'app/app.component.html',
-		styleUrls:  ['app/app.component.css'],
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+		styleUrls:  ['app.component.css'],
 		providers: [ PomodoroService, MODULE_POMODORO ]
 })
 export class AppComponent implements OnInit  {
