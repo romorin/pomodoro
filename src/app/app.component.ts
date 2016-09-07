@@ -1,15 +1,3 @@
-/*import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.css']
-})
-export class AppComponent {
-  title = 'app works!';
-}
-*/
-
 import { Component, OnInit } from '@angular/core';
 import { Pomodoro } from './pomodoro/pomodoro';
 import { PomodoroDisplay } from './pomodoro/pomodoro-display';
@@ -18,8 +6,8 @@ import { PomodoroService } from './pomodoro/pomodoro.service';
 import { MODULE_POMODORO } from './pomodoro/pomodoro.module';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: 'app.component.html',
+		selector: 'app-root',
+		templateUrl: 'app.component.html',
 		styleUrls:  ['app.component.css'],
 		providers: [ PomodoroService, MODULE_POMODORO ]
 })
@@ -32,9 +20,9 @@ export class AppComponent implements OnInit  {
 	ngOnInit(): void {
 		this.pomodoro = this.pomodoroService.display;
 		this.controller = this.pomodoroService.pomodoro;
-  }
+	}
 
-	public onEdit(){ this.controller.onEdit(); }
+	public onEdit() { this.controller.onEdit(); }
 	public onToggle() { this.controller.onToggle(); }
 	public onReset() { this.controller.onReset(); }
 
